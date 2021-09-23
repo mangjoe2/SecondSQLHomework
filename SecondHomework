@@ -1,0 +1,57 @@
+/**
+
+1.	What is a result set? It is a set of rows from a Database
+2.	What is the difference between Union and Union All? Union extracts the rows that are being specified in the query while Union All extracts all the rows including the duplicates from both the queries.
+3.	What are the other Set Operators SQL Server has? INTERCEPT, EXCEPT
+4.	What is the difference between Union and Join? A join is used to combine columns from different tables whereas the union is used to combine rows.
+5.	What is the difference between INNER JOIN and FULL JOIN? Inner join returns only the matching rows between both the tables, non-matching rows are eliminated. Full Join or Full Outer Join returns all rows from both the tables (left & right tables), including non-matching rows from both the tables
+6.	What is difference between left join and outer join
+7.	What is cross join? It creates a cartesian product between two tables.
+8.	What is the difference between WHERE clause and HAVING clause? having applies only to groups as a whole, whereas applied to individual rows
+9.	Can there be multiple groups by columns? Yes. When we define the grouping criteria on more than one column, all the records having the same value for the columns defined in the group by clause are collectively represented using a single record in the query output.
+
+*/
+--1.	How many products can you find in the Production.Product table?
+
+select ProductID
+from Production.Product
+
+--2.	Write a query that retrieves the number of products in the Production.Product table that are included in a subcategory. The rows that have NULL in column ProductSubcategoryID 
+--are considered to not be a part of any subcategory.
+
+select count(ProductSubcategoryID)
+from Production.Product
+where ProductSubcategoryID is not null
+
+--3.	How many Products reside in each SubCategory? Write a query to display the results with the following titles.
+/**select *
+from Production.Product
+*/
+
+select ProductSubcategoryID, count( ProductSubcategoryID ) as CountedProducts
+
+from Production.Product
+where ProductSubcategoryID is not null
+group by ProductSubcategoryID
+
+--4.	How many products that do not have a product subcategory. 
+
+select count(ProductID)
+from Production.Product
+where ProductSubcategoryID is null
+
+select *
+from Production.ProductInventory 
+
+--5.	Write a query to list the sum of products quantity in the Production.ProductInventory table.
+select sum(Quantity) as ProductQuantity
+from Production.ProductInventory 
+
+--6.	 Write a query to list the sum of products in the Production.ProductInventory table and LocationID set to 40 and limit the result to include just summarized 
+--quantities less than 100.
+
+select ProductID, sum(Quantity) as TheSum
+from Production.ProductInventory
+where LocationID = 40
+and Quantity < 100
+group by ProductID
